@@ -1,0 +1,21 @@
+{
+  "name": "react-router-junctions",
+  "version": "0.0.0",
+  "description": "junctions adapter for react-router",
+  "main": "react-router-junctions.js",
+  "keywords": [
+    "routing",
+    "react",
+    "react-router",
+    "junctions"
+  ],
+  "author": "James K Nelson <james@jamesknelson.com>",
+  "license": "MIT",
+  "dependencies": {
+    "deep-equal": "^1.0.1",
+    "junctions": "^0.0.0"
+  },
+  "peerDependencies": {
+    "react": "^15.3.2"
+  }
+}
