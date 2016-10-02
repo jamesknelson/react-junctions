@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { JunctionSet, Junction, Branch, Param } from 'junctions'
-import ContactScreen from './ContactScreen'
+import ContactDetailsScreen from './ContactDetailsScreen'
 
 
 const Content = Junction({
@@ -9,10 +9,10 @@ const Content = Junction({
   Details: Branch({
     params: {
       id: Param({ required: true }),
-      slug: Param(),
+      slug: Param({ default: '-' }),
     },
     data: {
-      Component: ContactScreen
+      Component: ContactDetailsScreen
     },
   }),
 }, 'List')
@@ -28,6 +28,8 @@ export default class ContactsScreen extends Component {
   render() {
     const locate = this.props.locate
     const { content, modal } = this.props.routes
+
+    console.log(content)
 
     return (
       <div>

@@ -1,8 +1,8 @@
 {
-  "name": "react-router-junctions",
+  "name": "react-junctions",
   "version": "0.0.0",
-  "description": "junctions adapter for react-router",
-  "main": "react-router-junctions.js",
+  "description": "junctions adapter for react and react-router",
+  "main": "react-junctions.js",
   "keywords": [
     "routing",
     "react",

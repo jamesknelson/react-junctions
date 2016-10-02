@@ -19,14 +19,14 @@ export default class AppScreen extends Component {
 
   render() {
     const locate = this.props.locate
-    const { content } = this.props.routes //TODO: this.props.routes
+    const { content } = this.props.routes
 
     return (
       <div>
         <nav>
-          <Link to={locate({ content: Content.branches.Contacts() })}>Contacts</Link>
+          <Link to={locate({ content: Content.Contacts() })}>Contacts</Link>
         </nav>
-        {/*<content.data.Component link={content.link} routes={content.children} params={content.params} />*/}
+        <content.data.Component locate={content.getLocation} routes={content.children} params={content.params} />
       </div>
     );
   }

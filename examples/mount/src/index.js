@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory } from 'react-router'
-import { Mount } from '../../../react-router-junctions'
+import { Mount } from '../../../react-router'
 import AppScreen from './screens/AppScreen'
 import './index.css'
 

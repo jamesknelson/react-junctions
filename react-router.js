@@ -7,7 +7,7 @@ function locationsEqual(x, y) {
   return (
     x.pathname == y.pathname &&
     x.search == y.search &&
-    deepEqual((x.state && x.state.junctions) || {}, (y.state && y.state.junctions) || {})
+    deepEqual((x.state && x.state.$$junctions) || {}, (y.state && y.state.$$junctions) || {})
   )
 }
 
@@ -31,12 +31,14 @@ function createRoute(component, junctionSet, path) {
     
     // TODO:
     // - calculate base path (path part of URL for baseRoutes)
-    // - calculate base query (query parts which don't match our format)
+    // - calculate base query (query parts which aren't included in junctionSet.$$junctionSetMeta.queryKeys)
     // - return
     const location = routerState.location
 
+    console.log(location.search)
+
     const nonJunctionsState = location.state || {}
-    delete nonJunctionsState.junctions
+    delete nonJunctionsState.$$junctions
 
     return {
       pathname: '/',
@@ -46,8 +48,6 @@ function createRoute(component, junctionSet, path) {
       state: nonJunctionsState,
     }
   }
-
-  console.log(junctionSet)
 
   const converter = createConverter(junctionSet)
 
