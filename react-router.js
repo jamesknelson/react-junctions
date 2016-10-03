@@ -1,6 +1,27 @@
+"use strict";
+
+
 var React = require('react')
 var deepEqual = require('deep-equal')
 var createConverter = require('junctions').createConverter
+
+
+function createSearch(query) {
+  var keys = Object.keys(query)
+
+  if (keys.length === 0) {
+    return ''
+  }
+
+  var parts = []
+  for (var i = 0, len = keys.length; i < len; i++) {
+    var key = keys[i]
+    var value = query[key]
+    parts.push(value === '' ? key : key+'='+encodeURIComponent(value))
+  }
+
+  return '?' + parts.join('&')
+}
 
 
 function locationsEqual(x, y) {
@@ -13,79 +34,96 @@ function locationsEqual(x, y) {
 
 
 function createRoute(component, junctionSet, path) {
-  const route = {}
-
-  if (path) {
-    route.path = (path === '/' || path === '') ? '**' : `${path}(/**)`
-  }
-  else {
-    route.childRoutes = [
-      { path: '**' }
-    ]
-  }
-
   function getBaseLocation(routerState) {
-    // TODO: memoize by object equality with memory size of 1
+    var location = routerState.location
 
-    // const baseRoutes = routerState.routes.slice(0, routerState.routes.indexOf(rootRoute))
+    var i, key, len
+    var baseQuery = {}
+    var locationKeys = Object.keys(location.query || {})
+
+    for (i = 0; i < locationKeys.length; i++) {
+      key = locationKeys[i]
+      baseQuery[key] = location.query[key]
+    }
+
+    var queryKeys = junctionSet.$$junctionSetMeta.queryKeys
+    for (i = 0, len = queryKeys.length; i < len; i++) {
+      key = queryKeys[i]
+      delete baseQuery[key]
+    }
+
+    var nonJunctionsState = {}
+    var stateKeys = Object.keys(location.state || {})
+    for (i = 0, len = stateKeys.length; i < len; i++) {
+      key = stateKeys[i]
+      if (key !== '$$junctions') {
+        nonJunctionsState[key] = location.state[key]
+      }
+    }
     
-    // TODO:
-    // - calculate base path (path part of URL for baseRoutes)
-    // - calculate base query (query parts which aren't included in junctionSet.$$junctionSetMeta.queryKeys)
-    // - return
-    const location = routerState.location
-
-    console.log(location.search)
-
-    const nonJunctionsState = location.state || {}
-    delete nonJunctionsState.$$junctions
-
     return {
-      pathname: '/',
-      search: location.search,
+      pathname: location.pathname.replace('/'+routerState.params.splat, '') || '/',
+      search: createSearch(baseQuery),
+      state: nonJunctionsState,
       hash: location.hash,
       key: location.key,
-      state: nonJunctionsState,
     }
   }
 
-  const converter = createConverter(junctionSet)
+  var converter = createConverter(junctionSet)
 
-  const JunctionMount = React.createClass({
+  var JunctionMount = React.createClass({
+    contextTypes: {
+      router: React.PropTypes.object
+    },
+
+    childContextTypes: {
+      history: React.PropTypes.object
+    },
+
+    getChildContext: function() {
+      return {
+        history: this.context.router
+      }
+    },
+
     render: function render() {
-      const baseLocation = getBaseLocation(this.props)
+      var baseLocation = getBaseLocation(this.props)
         
       return (
         React.createElement(component, {
-          routes: converter.getRouteSetFromLocation(baseLocation, this.props.location),
-          locate: routeSet => converter.getLocationFromRouteSet(baseLocation, routeSet),
+          routes: converter.getRouteSetFromLocation(this.props.location, baseLocation),
+          locate: routeSet => converter.getLocationFromRouteSet(routeSet, baseLocation),
         })
       )
     }
   })
 
   function handleChange(_, nextState, replace) {
-    const baseLocation = getBaseLocation(nextState)
-    const currentRouteSet = converter.getRouteSetFromLocation(baseLocation, nextState.location)
-    const canonicalLocation = converter.getLocationFromRouteSet(baseLocation, currentRouteSet)
+    var baseLocation = getBaseLocation(nextState)
+    var currentRouteSet = converter.getRouteSetFromLocation(nextState.location, baseLocation)
 
+    if (!currentRouteSet) {
+      console.error('react-junctions: Unknown location received')
+      return
+    }
+
+    var canonicalLocation = converter.getLocationFromRouteSet(currentRouteSet, baseLocation)
     if (!locationsEqual(canonicalLocation, nextState.location)) {
       replace(canonicalLocation)
     }
   }
 
-  route.component = JunctionMount
-  route.onEnter = handleChange.bind(null, {})
-  route.onChange = handleChange
-
-  return route
+  return {
+    component: JunctionMount,
+    onEnter: handleChange.bind(null, {}),
+    onChange: handleChange,
+    path: (path === '/' || path === '') ? '**' : `${path}(/**)`
+  }
 }
 
 
-module.exports.createRoute = createRoute
-
-
-module.exports.Mount = React.createClass({
+var Mount = React.createClass({
   displayName: 'Mount',
 
   propTypes: {
@@ -95,7 +133,7 @@ module.exports.Mount = React.createClass({
 
   statics: {
     createRouteFromReactElement: function createRouteFromReactElement(element) {
-      const component = element.props.component
+      var component = element.props.component
       return createRoute(component, component.junctionSet, element.props.path)
     },
   },
@@ -106,26 +144,8 @@ module.exports.Mount = React.createClass({
 })
 
 
-module.exports.IndexMount = React.createClass({
-  displayName: 'IndexMount',
-
-  propTypes: {
-    path: React.PropTypes.string.isRequired,
-    component: React.PropTypes.func.isRequired,
-  },
-
-  statics: {
-    createRouteFromReactElement: function createRouteFromReactElement(element, parentRoute) {
-      if (parentRoute) {
-        const component = element.props.component
-        parentRoute.indexRoute = createRoute(component, component.junctionSet)
-      } else {
-        throw new Error('An <IndexMount> does not make sense at the root of your route config')
-      }
-    },
-  },
-
-  render: function render() {
-    throw new Error('<IndexMount> elements are for router configuration and should not be rendered')
-  },
-})
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createRoute = createRoute
+exports.Mount = Mount

@@ -1,6 +1,6 @@
 {
   "name": "react-junctions",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "junctions adapter for react and react-router",
   "main": "react-junctions.js",
   "keywords": [
@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "deep-equal": "^1.0.1",
-    "junctions": "^0.0.0"
+    "junctions": "^0.0.1"
   },
   "peerDependencies": {
     "react": "^15.3.2"

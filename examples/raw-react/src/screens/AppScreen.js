@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
-import { JunctionSet, Junction, Branch } from 'junctions'
-import { Link } from 'react-router'
+import { JunctionSet, Junction, Branch, Param } from 'junctions'
+import Link from '../../../../Link'
 import ContactsScreen from './ContactsScreen'
 
 
 const Content = Junction({
   Contacts: Branch({
+    path: '/contacts',
     children: ContactsScreen.junctionSet,
+    params: {
+      page: Param({ default: 1 }),
+      pageSize: Param({ default: 20 }),
+    },
     data: {
       Component: ContactsScreen
     }
@@ -26,7 +31,11 @@ export default class AppScreen extends Component {
         <nav>
           <Link to={locate({ content: Content.Contacts() })}>Contacts</Link>
         </nav>
-        <content.data.Component locate={content.getLocation} routes={content.children} params={content.params} />
+        <content.data.Component
+          locate={content.locate}
+          routes={content.children}
+          params={content.params}
+        />
       </div>
     );
   }
