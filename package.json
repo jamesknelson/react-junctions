@@ -1,21 +1,38 @@
 {
   "name": "react-junctions",
-  "version": "0.0.1",
-  "description": "junctions adapter for react and react-router",
-  "main": "react-junctions.js",
+  "version": "0.0.5",
+  "description": "Tools for using Junctions with React",
+  "main": "lib/index.js",
   "keywords": [
     "routing",
     "react",
-    "react-router",
     "junctions"
   ],
+  "scripts": {
+    "clean": "rimraf lib dist es coverage",
+    "compile:watch": "babel --watch --source-maps=inline -d lib/ src/",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/index.js",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/index.min.js",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "prepublish": "npm run clean && npm run build"
+  },
   "author": "James K Nelson <james@jamesknelson.com>",
   "license": "MIT",
-  "dependencies": {
-    "deep-equal": "^1.0.1",
-    "junctions": "^0.0.1"
-  },
   "peerDependencies": {
-    "react": "^15.3.2"
+    "react": "^15.3.2",
+    "junctions": "^0.0.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "cross-env": "^1.0.7",
+    "rimraf": "^2.3.4",
+    "webpack": "^1.9.6"
   }
 }

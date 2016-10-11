@@ -1,10 +1,9 @@
-"use strict";
+import React from 'react'
 
 
-var React = require('react')
+export default React.createClass({
+  displayName: 'HistoryContext',
 
-
-var HistoryContext = React.createClass({
   propTypes: {
     history: React.PropTypes.object.isRequired,
     children: React.PropTypes.element.isRequired,
@@ -24,9 +23,3 @@ var HistoryContext = React.createClass({
     return this.props.children
   }
 })
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = HistoryContext

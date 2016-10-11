@@ -1,7 +1,4 @@
-"use strict";
-
-
-var React = require('react')
+import React from 'react'
 
 
 function isLeftClickEvent(event) {
@@ -13,7 +10,9 @@ function isModifiedEvent(event) {
 }
 
 
-var Link = React.createClass({
+export default React.createClass({
+  displayName: 'Link',
+
   contextTypes: {
     history: React.PropTypes.object,
   },
@@ -73,9 +72,3 @@ var Link = React.createClass({
     return React.createElement('a', props)
   }
 })
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = Link
