@@ -1,6 +1,6 @@
 {
   "name": "react-junctions",
-  "version": "0.0.5",
+  "version": "0.2.0",
   "description": "Tools for using Junctions with React",
   "main": "lib/index.js",
   "keywords": [
@@ -13,8 +13,8 @@
     "compile:watch": "babel --watch --source-maps=inline -d lib/ src/",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/index.js",
-    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/index.min.js",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-junctions.js",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-junctions.min.js",
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "prepublish": "npm run clean && npm run build"
   },
@@ -22,7 +22,7 @@
   "license": "MIT",
   "peerDependencies": {
     "react": "^15.3.2",
-    "junctions": "^0.0.5"
+    "junctions": "^0.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
