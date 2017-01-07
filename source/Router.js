@@ -30,7 +30,17 @@ export default React.createClass({
   componentWillMount() {
     this.converter = createConverter(this.props.junction, this.props.baseLocation)
     this.handleLocationChange(this.props.history.location)
+  },
+
+  componentDidMount() {
     this.unlisten = this.props.history.listen(this.handleLocationChange)
+  },
+
+  componentWillUnmount() {
+    if (this.unlisten) {
+      this.unlisten()
+      this.unlisten = null  
+    }
   },
 
   componentWillReceiveProps(nextProps) {
