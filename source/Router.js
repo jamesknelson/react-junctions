@@ -78,6 +78,7 @@ export default React.createClass({
     const renderProps = {
       route: this.state.route,
       locate: this.converter.locate,
+      converter: this.converter,
     }
 
     let content
