@@ -1,47 +1,32 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { createConverter, locationsEqual } from 'junctions'
 import HistoryContext from './HistoryContext'
 
-
-export default React.createClass({
-  displayName: 'Router',
-
-  propTypes: {
-    baseLocation: PropTypes.shape({
-      pathname: PropTypes.string,
-      search: PropTypes.string,
-      state: PropTypes.object,
-    }),
-    history: PropTypes.object.isRequired,
-    junction: PropTypes.object.isRequired,
-    render: PropTypes.oneOfType([PropTypes.func, PropTypes.instanceOf(Component), PropTypes.element]).isRequired,
-  },
-
-  childContextTypes: {
-    history: PropTypes.object,
-  },
+export default class Router
+  extends React.Component {
 
   getChildContext() {
     return {
       history: this.props.history,
     }
-  },
+  }
 
   componentWillMount() {
     this.converter = createConverter(this.props.junction, this.props.baseLocation)
     this.handleLocationChange(this.props.history.location)
-  },
+  }
 
   componentDidMount() {
     this.unlisten = this.props.history.listen(this.handleLocationChange)
-  },
+  }
 
   componentWillUnmount() {
     if (this.unlisten) {
       this.unlisten()
-      this.unlisten = null  
+      this.unlisten = null
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     const prevBase = this.props.baseLocation
@@ -51,9 +36,9 @@ export default React.createClass({
       (!prevBase && nextBase) ||
       (nextBase && !prevBase) ||
       (nextBase && prevBase &&
-          nextBase.pathname != prevBase.pathname &&
-          nextBase.search != prevBase.search &&
-          nextBase.state != prevBase.state
+        nextBase.pathname != prevBase.pathname &&
+        nextBase.search != prevBase.search &&
+        nextBase.state != prevBase.state
       )
 
     // Don't recreate the converter unless we need to, as it can be an expensive operation,
@@ -61,7 +46,7 @@ export default React.createClass({
     if (baseChanged || nextProps.junction != this.props.junction) {
       this.converter = createConverter(nextProps.junction, nextProps.baseLocation)
     }
-  },
+  }
 
   handleLocationChange(location) {
     const route = this.converter.route(location)
@@ -72,7 +57,7 @@ export default React.createClass({
     }
 
     this.setState({ route })
-  },
+  }
 
   render() {
     const renderProps = {
@@ -82,7 +67,7 @@ export default React.createClass({
     }
 
     let content
-    if (this.props.render instanceof Component) {
+    if (this.props.render instanceof React.Component) {
       content = React.createElement(this.props.render, renderProps)
     }
     else if (typeof this.props.render == 'function') {
@@ -92,6 +77,21 @@ export default React.createClass({
       content = React.cloneElement(this.props.render, renderProps)
     }
 
-    return React.createElement(HistoryContext, {history: this.props.history}, content)
-  },
-})
+    return React.createElement(HistoryContext, { history: this.props.history }, content)
+  }
+}
+
+Router.propTypes = {
+  baseLocation: PropTypes.shape({
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+    state: PropTypes.object,
+  }),
+  history: PropTypes.object.isRequired,
+  junction: PropTypes.object.isRequired,
+  render: PropTypes.oneOfType([PropTypes.func, PropTypes.instanceOf(React.Component), PropTypes.element]).isRequired
+}
+
+Router.childContextTypes = {
+  history: PropTypes.object
+}

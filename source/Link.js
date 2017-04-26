@@ -17,8 +17,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 
-import React from 'react'
-
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function isLeftClickEvent(event) {
   return event.button === 0
@@ -28,23 +28,10 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
 }
 
+export default class Link
+  extends React.Component {
 
-export default React.createClass({
-  displayName: 'Link',
-
-  contextTypes: {
-    history: React.PropTypes.object,
-  },
-
-  propTypes: {
-    history: React.PropTypes.object,
-
-    to: React.PropTypes.object.isRequired,
-    onClick: React.PropTypes.func,
-    target: React.PropTypes.string
-  },
-
-  handleClick: function(event) {
+  handleClick(event) {
     if (this.props.onClick) {
       this.props.onClick(event)
     }
@@ -71,7 +58,7 @@ export default React.createClass({
     event.preventDefault()
 
     history.push(this.props.to)
-  },
+  }
 
   render() {
     var props = {}
@@ -90,4 +77,16 @@ export default React.createClass({
 
     return React.createElement('a', props)
   }
-})
+}
+
+Link.contextTypes = {
+  history: PropTypes.object
+}
+
+Link.propTypes = {
+  history: PropTypes.object,
+
+  to: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
+  target: PropTypes.string
+}

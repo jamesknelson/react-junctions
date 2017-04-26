@@ -20,6 +20,9 @@
   },
   "author": "James K Nelson <james@jamesknelson.com>",
   "license": "MIT",
+  "dependencies": {
+    "prop-types": "^15.5.0"
+  },
   "peerDependencies": {
     "react": "^15.3.2",
     "junctions": "^0.3.0"
