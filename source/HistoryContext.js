@@ -1,25 +1,25 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
+export default class HistoryContext
+  extends React.Component {
 
-export default React.createClass({
-  displayName: 'HistoryContext',
-
-  propTypes: {
-    history: React.PropTypes.object.isRequired,
-    children: React.PropTypes.element.isRequired,
-  },
-
-  childContextTypes: {
-    history: React.PropTypes.object
-  },
-
-  getChildContext: function() {
+  getChildContext() {
     return {
       history: this.props.history
     }
-  },
+  }
 
   render() {
     return this.props.children
   }
-})
+}
+
+HistoryContext.propTypes = {
+  history: PropTypes.object.isRequired,
+  children: PropTypes.element.isRequired,
+}
+
+HistoryContext.childContextTypes = {
+  history: PropTypes.object
+}
