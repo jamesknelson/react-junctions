@@ -28,9 +28,11 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
 }
 
-export default class Link
-  extends React.Component {
-
+export default class Link extends React.Component {
+  constructor() {
+    super()
+    this.handleClick = this.handleClick.bind(this)
+  }
   handleClick(event) {
     if (this.props.onClick) {
       this.props.onClick(event)
