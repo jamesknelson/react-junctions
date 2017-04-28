@@ -5,6 +5,7 @@ import HistoryContext from './HistoryContext'
 
 export default class Router extends React.Component {
   constructor() {
+    super()
     this.getChildContext = this.getChildContext.bind(this)
     this.handleLocationChange = this.handleLocationChange.bind(this)
   }

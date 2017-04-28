@@ -30,6 +30,7 @@ function isModifiedEvent(event) {
 
 export default class Link extends React.Component {
   constructor() {
+    super()
     this.handleClick = this.handleClick.bind(this)
   }
   handleClick(event) {
