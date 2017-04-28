@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { createConverter, locationsEqual } from 'junctions'
 import HistoryContext from './HistoryContext'
 
-export default class Router
-  extends React.Component {
+export default class Router extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleLocationChange = this.handleLocationChange.bind(this)
+  }
 
   getChildContext() {
     return {

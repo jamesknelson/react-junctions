@@ -1,6 +1,6 @@
 {
   "name": "react-junctions",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Tools for using the Junctions routing library with React",
   "main": "lib/index.js",
   "keywords": [

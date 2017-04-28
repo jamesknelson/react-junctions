@@ -16,7 +16,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 
 
-
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -28,8 +27,11 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
 }
 
-export default class Link
-  extends React.Component {
+export default class Link extends React.Component {
+  constructor(props) {
+    super()
+    this.handleClick = this.handleClick.bind(this)
+  }
 
   handleClick(event) {
     if (this.props.onClick) {
